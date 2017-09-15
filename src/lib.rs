@@ -353,4 +353,16 @@ mod tests {
         println!("physical: {:?}, logical: {:?}", physical, logical);
         assert!(physical <= logical);
     }
+
+    #[test]
+    fn test_travis_cpu_count() {
+        if let Ok(_) = ::std::env::var("TRAVIS") {
+            // Per https://docs.travis-ci.com/user/reference/overview/ -
+            // Travis CI servers make 2 cores available to processes via
+            // virtualization.
+            let expected_cpus: usize = 999;
+
+            assert_eq!(super::get(), expected_cpus);
+        }
+    }
 }
